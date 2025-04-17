@@ -53,6 +53,20 @@ export const getTeams = async (req, res) => {
   }
 };
 
+// Get latest teams
+export const getLatestTeams = async (req, res) => {
+  try {
+    const teams = await Team.find()
+      .populate("captain")
+      .populate("players")
+      .sort({ createdAt: -1 }) // Sort by newest first
+      .limit(10); // Get only the 10 most recent teams
+    res.json(teams);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Get team details by ID
 export const getTeamById = async (req, res) => {
   try {
